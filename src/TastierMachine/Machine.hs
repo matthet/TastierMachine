@@ -37,7 +37,7 @@
 module TastierMachine.Machine where
 import qualified TastierMachine.Instructions as Instructions
 import Data.Int (Int8, Int16)
-import Data.Char (intToDigit)
+import Data.Char (intToDigit, chr)
 import Numeric (showIntAtBase)
 import Data.Bits (complement)
 import Data.Array ((//), (!), Array, elems)
@@ -180,6 +180,15 @@ run = do
           tell $ [show $ smem ! (rtp-1)]
           put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
           run
+	
+	Instructions.WriteStr  -> do
+	  let address = smem ! (rtp-1)
+          let length = dmem ! (address-3)
+	  let stringArray = loadFromMem [] length (address-2) dmem
+          tell $ [map (chr . fromIntegral) stringArray]
+  
+	  put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
+          run
 
         Instructions.Leave  -> do
           {-
@@ -319,3 +328,7 @@ followChain limit n rbp smem =
   if n > limit then
     followChain limit (n-1) (smem ! (rbp+2)) smem
   else rbp
+
+loadFromMem :: [Int16] -> Int16 -> Int16 -> (Array Int16 Int16) -> [Int16]
+loadFromMem stringArray 0 _ _ = stringArray
+loadFromMem stringArray len addr dmem = loadFromMem ([dmem ! addr]++stringArray)(len-1)(addr+1) dmem
