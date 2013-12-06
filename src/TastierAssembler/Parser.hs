@@ -28,6 +28,9 @@ parseInstruction lineNumber text =
     ["Equ"]         -> Right $ I.Nullary I.Equ
     ["Lss"]         -> Right $ I.Nullary I.Lss
     ["Gtr"]         -> Right $ I.Nullary I.Gtr
+    ["GtrOrEqu"]    -> Right $ I.Nullary I.GtrOrEqu
+    ["LssOrEqu"]    -> Right $ I.Nullary I.LssOrEqu
+    ["NotEqu"]    -> Right $ I.Nullary I.NotEqu
     ["Neg"]         -> Right $ I.Nullary I.Neg
     ["Load", a, b]  ->
       let a' = B.readInteger a

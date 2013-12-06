@@ -154,6 +154,30 @@ run = do
                           smem = (smem // [(rtp-2, result)]) }
           run
 
+	Instructions.GtrOrEqu    -> do
+          let a = smem ! (rtp-1)
+          let b = smem ! (rtp-2)
+          let result = fromIntegral $ fromEnum (b >= a)
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1,
+                          smem = (smem // [(rtp-2, result)]) }
+          run
+
+	Instructions.LssOrEqu    -> do
+          let a = smem ! (rtp-1)
+          let b = smem ! (rtp-2)
+          let result = fromIntegral $ fromEnum (b <= a)
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1,
+                          smem = (smem // [(rtp-2, result)]) }
+          run
+
+	Instructions.NotEqu    -> do
+          let a = smem ! (rtp-1)
+          let b = smem ! (rtp-2)
+          let result = fromIntegral $ fromEnum (b /= a)
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1,
+                          smem = (smem // [(rtp-2, result)]) }
+          run
+
         Instructions.Neg    -> do
           let a = smem ! (rtp-1)
           let result = complement a
