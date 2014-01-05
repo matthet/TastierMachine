@@ -30,7 +30,7 @@ parseInstruction lineNumber text =
     ["Gtr"]         -> Right $ I.Nullary I.Gtr
     ["GtrOrEqu"]    -> Right $ I.Nullary I.GtrOrEqu
     ["LssOrEqu"]    -> Right $ I.Nullary I.LssOrEqu
-    ["NotEqu"]    -> Right $ I.Nullary I.NotEqu
+    ["NotEqu"]      -> Right $ I.Nullary I.NotEqu
     ["Neg"]         -> Right $ I.Nullary I.Neg
     ["Load", a, b]  ->
       let a' = B.readInteger a
@@ -108,8 +108,10 @@ parseInstruction lineNumber text =
     ["Ret"]         -> Right $ I.Nullary I.Ret
     ["Leave"]       -> Right $ I.Nullary I.Leave
     ["Read"]        -> Right $ I.Nullary I.Read
-    ["Write"]       -> Right $ I.Nullary I.Write
+    ["WriteInt"]    -> Right $ I.Nullary I.WriteInt
     ["WriteStr"]    -> Right $ I.Nullary I.WriteStr
+    ["WriteBool"]   -> Right $ I.Nullary I.WriteBool
+    ["WriteChar"]   -> Right $ I.Nullary I.WriteChar
     ["Halt"]        -> Right $ I.Nullary I.Halt
     ["Dup"]         -> Right $ I.Nullary I.Dup
     ["Nop"]         -> Right $ I.Nullary I.Nop

@@ -9,9 +9,9 @@ data Instruction = Add
                  | Equ
                  | Lss
                  | Gtr
-		 | GtrOrEqu
-		 | LssOrEqu
-		 | NotEqu
+		         | GtrOrEqu
+		         | LssOrEqu
+		         | NotEqu
                  | Neg
                  | Load
                  | Sto
@@ -25,8 +25,10 @@ data Instruction = Add
                  | Ret
                  | Leave
                  | Read
-                 | Write
-		 | WriteStr
+                 | WriteInt
+		         | WriteStr
+                 | WriteBool
+                 | WriteChar
                  | Halt
                  | Dup
                  | Nop

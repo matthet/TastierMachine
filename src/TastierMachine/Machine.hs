@@ -154,7 +154,7 @@ run = do
                           smem = (smem // [(rtp-2, result)]) }
           run
 
-	Instructions.GtrOrEqu    -> do
+        Instructions.GtrOrEqu    -> do
           let a = smem ! (rtp-1)
           let b = smem ! (rtp-2)
           let result = fromIntegral $ fromEnum (b >= a)
@@ -162,7 +162,7 @@ run = do
                           smem = (smem // [(rtp-2, result)]) }
           run
 
-	Instructions.LssOrEqu    -> do
+        Instructions.LssOrEqu    -> do
           let a = smem ! (rtp-1)
           let b = smem ! (rtp-2)
           let result = fromIntegral $ fromEnum (b <= a)
@@ -170,7 +170,7 @@ run = do
                           smem = (smem // [(rtp-2, result)]) }
           run
 
-	Instructions.NotEqu    -> do
+        Instructions.NotEqu    -> do
           let a = smem ! (rtp-1)
           let b = smem ! (rtp-2)
           let result = fromIntegral $ fromEnum (b /= a)
@@ -193,25 +193,39 @@ run = do
 
         Instructions.Read   -> do
           value <- ask
-	  case value of
+          case value of
             (i:rest) -> do 
               put $ machine { rpc = rpc + 1, rtp = rtp + 1,
                               smem = (smem // [(rtp, i)]) }
               local tail run
             [] -> error $ "Read instruction issued but no data left to read"
 
-        Instructions.Write  -> do
+        Instructions.WriteInt  -> do
           tell $ [show $ smem ! (rtp-1)]
           put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
           run
-	
-	Instructions.WriteStr  -> do
-	  let address = smem ! (rtp-1)
+
+        Instructions.WriteStr  -> do
+          let address = smem ! (rtp-1)
           let length = dmem ! (address-3)
-	  let stringArray = loadFromMem [] length (address-2) dmem
+          let stringArray = loadFromMem [] length (address-2) dmem
           tell $ [map (chr . fromIntegral) stringArray]
   
-	  put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
+          run
+
+        Instructions.WriteBool  -> do
+          let boolean = smem ! (rtp-1)
+          case boolean of
+            0 -> tell $ ["false"]
+            1 -> tell $ ["true"]
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
+          run
+
+        Instructions.WriteChar  -> do
+          let character = smem ! (rtp-1)
+          tell $ [map (chr . fromIntegral) [character]]
+          put $ machine { rpc = rpc + 1, rtp = rtp - 1 }
           run
 
         Instructions.Leave  -> do
